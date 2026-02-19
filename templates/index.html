@@ -12,4 +12,7 @@
 <label for="thinkertoy">Thinkertoy</label>
 <button type="submit">Convert</button>
 </form>
+{{if .Result}}
+<pre>{{.Result}}</pre>
+{{end}}
 {{end}}
