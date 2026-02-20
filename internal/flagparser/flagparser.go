@@ -1,4 +1,4 @@
-// Package flagparser validates command-line arguments for the ascii-art-color program.
+// Package flagparser validates command-line arguments for the ascii-art-web program.
 //
 // Its responsibility is limited to validating input format and structure.
 // It does NOT perform rendering or color validation logic.

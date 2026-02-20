@@ -1,6 +1,8 @@
-# ascii-art-color
+# ascii-art-web
 
-![CI](https://github.com/teovaira/ascii-art-color/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/teovaira/ascii-art-web/actions/workflows/ci.yml/badge.svg)
+
+ASCII Art Generator with Web Interface - Convert text strings into ASCII art using predefined banner styles (standard, shadow, thinkertoy) via a web GUI.
 
 ASCII Art Generator with ANSI Color Support - Convert text strings into ASCII art using predefined banner styles (standard, shadow, thinkertoy), with optional 24-bit color for full text or specific substrings.
 
@@ -25,8 +27,8 @@ ASCII Art Generator with ANSI Color Support - Convert text strings into ASCII ar
 
 ```bash
 # Clone the repository
-git clone https://github.com/teovaira/ascii-art-color.git
-cd ascii-art-color
+git clone https://github.com/teovaira/ascii-art-web.git
+cd ascii-art-web
 
 # Build (from repository root)
 make build
@@ -148,7 +150,7 @@ make run-color
 ### Project Structure
 
 ```
-ascii-art-color/
+ascii-art-web/
 ├── .github/
 │   └── workflows/
 │       ├── ci.yml             # CI workflow (test, lint, build)

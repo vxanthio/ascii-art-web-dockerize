@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Instructions for AI coding agents working on the ascii-art-color project.
+Instructions for AI coding agents working on the ascii-art-web project.
 
 ## Project Overview
 
@@ -33,7 +33,7 @@ cd cmd/ascii-art && go run . --color=red He "Hello"
 ## Project Structure
 
 ```
-ascii-art-color/
+ascii-art-web/
 ├── .github/
 │   └── workflows/
 │       ├── ci.yml             # CI workflow (test, lint, build)

@@ -6,11 +6,11 @@ import (
 	"os"
 	"strings"
 
-	"ascii-art-color/internal/color"
-	"ascii-art-color/internal/coloring"
-	"ascii-art-color/internal/flagparser"
-	"ascii-art-color/internal/parser"
-	"ascii-art-color/internal/renderer"
+	"ascii-art-web/internal/color"
+	"ascii-art-web/internal/coloring"
+	"ascii-art-web/internal/flagparser"
+	"ascii-art-web/internal/parser"
+	"ascii-art-web/internal/renderer"
 )
 
 // runColorMode handles execution when the --color flag is detected.
