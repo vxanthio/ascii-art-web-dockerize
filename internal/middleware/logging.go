@@ -25,7 +25,12 @@ func Logging(logger *log.Logger) func(http.Handler) http.Handler {
 			next.ServeHTTP(rw, r)
 
 			duration := time.Since(start)
-			logger.Printf("%s %s %d %v", r.Method, r.URL.Path, rw.status, duration)
+			logger.Printf("[%s] %s %s %d %dms",
+				start.Format("2006-01-02 15:04:05"),
+				r.Method,
+				r.URL.Path,
+				rw.status,
+				duration.Milliseconds())
 		})
 	}
 }
