@@ -18,9 +18,9 @@ body {
 /* ===== HEADER (NEON GLOW) ===== */
 header {
     text-align: center;
-    padding: 2.5rem 1rem 1.5rem 1rem;
+    padding: 4rem 1rem 0.2rem 1rem;
      font-family: 'Italianno', Helvetica, sans-serif;
-    font-size: 2.5rem;
+    font-size:3rem;
     font-weight: bold;
     letter-spacing: 2px;
     color: #c77dff;
@@ -37,8 +37,9 @@ main {
     flex: 1;
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* pushes form higher */
-    padding-top: 2rem;       /* space from header */
+    flex-direction: column;
+    align-items: center; 
+    padding-top: 0.5rem;       /* space from header */
     padding-bottom: 3rem;    /* space for result */
     flex-wrap: wrap;
 }
