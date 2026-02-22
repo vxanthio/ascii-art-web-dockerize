@@ -1,0 +1,164 @@
+/* ===== RESET ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ===== BODY ===== */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: radial-gradient(circle at top, #1a001f, #0d0d0d 70%);
+    color: #e0e0e0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== HEADER (NEON GLOW) ===== */
+header {
+    text-align: center;
+    padding: 2.5rem 1rem 1.5rem 1rem;
+     font-family: 'Italianno', Helvetica, sans-serif;
+    font-size: 2.5rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #c77dff;
+
+    text-shadow:
+        0 0 5px #c77dff,
+        0 0 10px #9d4edd,
+        0 0 20px #7b2cbf,
+        0 0 40px #5a189a;
+}
+
+/* ===== MAIN ===== */
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* pushes form higher */
+    padding-top: 2rem;       /* space from header */
+    padding-bottom: 3rem;    /* space for result */
+    flex-wrap: wrap;
+}
+
+/* ===== FORM CARD ===== */
+form {
+    background: #2b2b2b;
+    padding: 2rem;
+    border-radius: 14px;
+    width: 100%;
+    max-width: 650px;
+    box-shadow:
+        0 0 15px rgba(157, 78, 221, 0.3),
+        0 0 30px rgba(90, 24, 154, 0.2);
+}
+
+/* ===== LABEL ===== */
+label {
+    display: block;
+    margin-bottom: 0.6rem;
+    font-weight: 600;
+    color: #c77dff;
+}
+
+/* ===== TEXTAREA ===== */
+textarea {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 10px;
+    border: 1px solid #444;
+    background: #1c1c1c;
+    color: #ffffff;
+    resize: vertical;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    outline: none;
+    transition: 0.3s ease;
+}
+
+textarea:focus {
+    border-color: #9d4edd;
+    box-shadow: 0 0 10px #7b2cbf;
+}
+
+/* ===== RADIO BUTTONS ===== */
+input[type="radio"] {
+    margin-right: 6px;
+    margin-top: 10px;
+    accent-color: #9d4edd; /* modern browsers */
+}
+
+input[type="radio"] + label {
+    display: inline;
+    margin-right: 20px;
+    cursor: pointer;
+    color: #ccc;
+}
+
+/* ===== BUTTON ===== */
+button {
+  
+    margin-top: 1.5rem;
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    border-radius: 10px;
+    background: #7b2cbf;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s ease;
+
+    box-shadow: 0 0 10px #7b2cbf;
+}
+
+button:hover {
+    background: #9d4edd;
+    box-shadow:
+        0 0 10px #c77dff,
+        0 0 20px #9d4edd,
+        0 0 30px #7b2cbf;
+    transform: translateY(-2px);
+}
+pre {
+    width: 100%;
+    max-width: 650px;
+    min-height: 150px;
+    margin-top: 1rem;
+    font-family: monospace;
+    overflow-x: scroll;
+    background: #2b2b2b;
+    color: #e0e0e0;
+    padding: 1rem;
+    border-radius: 10px;
+   box-shadow:
+        0 0 15px rgba(157, 78, 221, 0.3),
+        0 0 30px rgba(90, 24, 154, 0.2);
+}
+
+/* ===== FOOTER ===== */
+footer {
+    text-align: center;
+    padding: 1rem;
+    background: #111;
+    font-size: 0.9rem;
+    
+    color: #777;
+}
+@media (max-width:768px) {
+    header {
+        font-size:1rem;
+    }
+    main{
+        padding-top:1rem;
+    }
+    form {
+        padding: 1rem;
+    }
+    button {
+    font-size: 1rem;
+    }
+}
