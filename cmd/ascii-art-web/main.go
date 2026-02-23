@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"ascii-art-color/internal/server"
+	"ascii-art-web/internal/server"
 )
 
 func main() {
