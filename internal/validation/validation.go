@@ -1,3 +1,5 @@
+// Package validation provides input validation for user-submitted data.
+// It validates text content and banner names to ensure safe processing.
 package validation
 
 import (

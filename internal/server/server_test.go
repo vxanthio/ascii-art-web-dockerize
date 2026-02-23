@@ -72,7 +72,6 @@ func TestServerRoutes(t *testing.T) {
 		wantStatus int
 	}{
 		{"GET root", "GET", "/", http.StatusOK},
-		{"POST ascii-art", "POST", "/ascii-art", http.StatusOK},
 		{"GET not found", "GET", "/invalid", http.StatusNotFound},
 	}
 

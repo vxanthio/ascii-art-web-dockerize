@@ -1,3 +1,5 @@
+// Package server provides HTTP server functionality for the ASCII art web application.
+// It handles routing, middleware integration, and request processing.
 package server
 
 import (
@@ -8,6 +10,10 @@ import (
 	"time"
 
 	"ascii-art-web/internal/middleware"
+	"ascii-art-web/internal/parser"
+	"ascii-art-web/internal/renderer"
+	"ascii-art-web/internal/sanitize"
+	"ascii-art-web/internal/validation"
 )
 
 type Server struct {
@@ -62,6 +68,46 @@ func handleAsciiArt(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
+
+	// Parse form
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		return
+	}
+
+	text := r.FormValue("text")
+	banner := r.FormValue("banner")
+
+	if banner == "" {
+		banner = "standard"
+	}
+
+	if err := validation.ValidateText(text); err != nil {
+		http.Error(w, "Bad Request: "+err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if err := validation.ValidateBanner(banner); err != nil {
+		http.Error(w, "Not Found: invalid banner", http.StatusNotFound)
+		return
+	}
+
+	bannerPath := "cmd/ascii-art/testdata/" + banner + ".txt"
+	bannerData, err := parser.LoadBanner(os.DirFS("."), bannerPath)
+	if err != nil {
+		http.Error(w, "Not Found: banner file not found", http.StatusNotFound)
+		return
+	}
+
+	result, err := renderer.ASCII(text, bannerData)
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	safeResult := sanitize.HTML(result)
+
+	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("ASCII Art"))
+	w.Write([]byte(safeResult))
 }

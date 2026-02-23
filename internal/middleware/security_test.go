@@ -66,10 +66,10 @@ func TestSecurityHeadersAllPresent(t *testing.T) {
 	wrapped.ServeHTTP(w, req)
 
 	expectedHeaders := map[string]string{
-		"X-Content-Type-Options":   "nosniff",
-		"X-Frame-Options":          "DENY",
-		"X-XSS-Protection":         "1; mode=block",
-		"Content-Security-Policy":  "default-src 'self'",
+		"X-Content-Type-Options":  "nosniff",
+		"X-Frame-Options":         "DENY",
+		"X-XSS-Protection":        "1; mode=block",
+		"Content-Security-Policy": "default-src 'self'",
 	}
 
 	for name, want := range expectedHeaders {

@@ -83,7 +83,7 @@ func TestHTML(t *testing.T) {
 func TestHTMLPreservesNewlines(t *testing.T) {
 	input := "Line 1\nLine 2\nLine 3"
 	want := "Line 1\nLine 2\nLine 3"
-	
+
 	got := HTML(input)
 	if got != want {
 		t.Errorf("HTML() should preserve newlines, got %q, want %q", got, want)
@@ -92,14 +92,14 @@ func TestHTMLPreservesNewlines(t *testing.T) {
 
 func TestHTMLMultipleEscapes(t *testing.T) {
 	input := "<script>alert('test')</script>"
-	
+
 	// First escape
 	escaped1 := HTML(input)
 	expected1 := "&lt;script&gt;alert(&#39;test&#39;)&lt;/script&gt;"
 	if escaped1 != expected1 {
 		t.Errorf("First escape failed: got %q, want %q", escaped1, expected1)
 	}
-	
+
 	// Second escape (should escape the & symbols)
 	escaped2 := HTML(escaped1)
 	if escaped2 == escaped1 {
