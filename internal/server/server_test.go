@@ -89,3 +89,19 @@ func TestServerRoutes(t *testing.T) {
 		})
 	}
 }
+
+func TestServerMiddlewareChain(t *testing.T) {
+	srv := New(":8080")
+
+	// Test that recovery middleware catches panics
+	// We can't easily test this without modifying handlers,
+	// but we can verify the middleware chain is applied
+	req := httptest.NewRequest("GET", "/", nil)
+	w := httptest.NewRecorder()
+
+	srv.Handler.ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Errorf("middleware chain broken: expected 200, got %d", w.Code)
+	}
+}

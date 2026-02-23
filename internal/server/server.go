@@ -7,7 +7,7 @@ import (
 	"os"
 	"time"
 
-	"ascii-art-color/internal/middleware"
+	"ascii-art-web/internal/middleware"
 )
 
 type Server struct {
@@ -16,14 +16,14 @@ type Server struct {
 
 func New(addr string) *Server {
 	mux := http.NewServeMux()
-	
+
 	// Register routes
 	mux.HandleFunc("/", handleHome)
 	mux.HandleFunc("/ascii-art", handleAsciiArt)
 
-	// Wrap with logging middleware
+	// Chain middleware: Recovery -> Logging -> Routes
 	logger := log.New(os.Stdout, "", log.LstdFlags)
-	handler := middleware.Logging(logger)(mux)
+	handler := middleware.Recovery(logger)(middleware.Logging(logger)(mux))
 
 	return &Server{
 		Server: &http.Server{
