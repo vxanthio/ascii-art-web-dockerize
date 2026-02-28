@@ -22,6 +22,11 @@ func TestValidateText(t *testing.T) {
 			wantErr: nil,
 		},
 		{
+			name:    "carriage return newline",
+			text:    "Hello\r\nWorld",
+			wantErr: ErrInvalidChars,
+		},
+		{
 			name:    "valid with special chars",
 			text:    "Hello! @#$%^&*()",
 			wantErr: nil,
