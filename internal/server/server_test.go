@@ -40,13 +40,13 @@ func TestHandleAsciiArt(t *testing.T) {
 		{
 			name:       "valid request",
 			method:     http.MethodPost,
-			formData:   url.Values{"text": {"Hello"}, "banner": {"standard"}},
+			formData:   url.Values{"input": {"Hello"}, "font": {"standard"}},
 			wantStatus: http.StatusOK,
 		},
 		{
 			name:       "default banner",
 			method:     http.MethodPost,
-			formData:   url.Values{"text": {"Hello"}},
+			formData:   url.Values{"input": {"Hello"}},
 			wantStatus: http.StatusOK,
 		},
 		{
@@ -58,19 +58,19 @@ func TestHandleAsciiArt(t *testing.T) {
 		{
 			name:       "empty text",
 			method:     http.MethodPost,
-			formData:   url.Values{"text": {""}, "banner": {"standard"}},
+			formData:   url.Values{"input": {""}, "font": {"standard"}},
 			wantStatus: http.StatusBadRequest,
 		},
 		{
 			name:       "text too long",
 			method:     http.MethodPost,
-			formData:   url.Values{"text": {strings.Repeat("a", 1001)}, "banner": {"standard"}},
+			formData:   url.Values{"input": {strings.Repeat("a", 1001)}, "font": {"standard"}},
 			wantStatus: http.StatusBadRequest,
 		},
 		{
 			name:       "invalid banner",
 			method:     http.MethodPost,
-			formData:   url.Values{"text": {"Hello"}, "banner": {"invalid"}},
+			formData:   url.Values{"input": {"Hello"}, "font": {"invalid"}},
 			wantStatus: http.StatusNotFound,
 		},
 	}

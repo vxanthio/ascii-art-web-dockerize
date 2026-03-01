@@ -11,6 +11,7 @@ import (
 )
 
 func Start(addr string) error {
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 	http.HandleFunc("/", handleHome)
 	http.HandleFunc("/ascii-art", handleAsciiArt)
 	return http.ListenAndServe(addr, nil)
@@ -23,6 +24,35 @@ func handleHome(w http.ResponseWriter, r *http.Request) {
 	}
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("Home"))
+}
+
+// GenerateASCII validates input and generates ASCII art.
+// Returns the result string and an error with appropriate HTTP status code.
+func GenerateASCII(text, banner string) (string, int, error) {
+	if banner == "" {
+		banner = "standard"
+	}
+
+	if err := validation.ValidateText(text); err != nil {
+		return "", http.StatusBadRequest, err
+	}
+
+	if err := validation.ValidateBanner(banner); err != nil {
+		return "", http.StatusNotFound, err
+	}
+
+	bannerPath := "cmd/ascii-art/testdata/" + banner + ".txt"
+	bannerData, err := parser.LoadBanner(os.DirFS("."), bannerPath)
+	if err != nil {
+		return "", http.StatusNotFound, err
+	}
+
+	result, err := renderer.ASCII(text, bannerData)
+	if err != nil {
+		return "", http.StatusInternalServerError, err
+	}
+
+	return result, http.StatusOK, nil
 }
 
 func handleAsciiArt(w http.ResponseWriter, r *http.Request) {
@@ -42,32 +72,12 @@ func handleAsciiArt(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	text := r.FormValue("text")
-	banner := r.FormValue("banner")
-	if banner == "" {
-		banner = "standard"
-	}
+	text := r.FormValue("input")
+	banner := r.FormValue("font")
 
-	if err := validation.ValidateText(text); err != nil {
-		http.Error(w, "Bad Request: "+err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	if err := validation.ValidateBanner(banner); err != nil {
-		http.Error(w, "Not Found: invalid banner", http.StatusNotFound)
-		return
-	}
-
-	bannerPath := "cmd/ascii-art/testdata/" + banner + ".txt"
-	bannerData, err := parser.LoadBanner(os.DirFS("."), bannerPath)
+	result, status, err := GenerateASCII(text, banner)
 	if err != nil {
-		http.Error(w, "Not Found: banner file not found", http.StatusNotFound)
-		return
-	}
-
-	result, err := renderer.ASCII(text, bannerData)
-	if err != nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		http.Error(w, err.Error(), status)
 		return
 	}
 
