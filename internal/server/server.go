@@ -2,28 +2,38 @@
 package server
 
 import (
+	"html/template"
 	"net/http"
 	"os"
 
 	"ascii-art-web/internal/parser"
 	"ascii-art-web/internal/renderer"
 	"ascii-art-web/internal/validation"
+	"ascii-art-web/internal/web"
 )
 
 func Start(addr string) error {
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
-	http.HandleFunc("/", handleHome)
-	http.HandleFunc("/ascii-art", handleAsciiArt)
-	return http.ListenAndServe(addr, nil)
-}
-
-func handleHome(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/" {
-		http.NotFound(w, r)
-		return
+	// Initialize template cache
+	cache := make(map[string]*template.Template)
+	ts, err := template.ParseFiles("templates/base.html", "templates/index.html")
+	if err != nil {
+		return err
 	}
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Home"))
+	cache["index.html"] = ts
+
+	// Create application with Vasiliki's handlers
+	app := &web.Application{
+		TemplateCache: cache,
+	}
+
+	// Serve static files
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	
+	// Use Vasiliki's handlers
+	http.HandleFunc("/", app.Home)
+	http.HandleFunc("/ascii-art", app.HandleAsciiArt)
+	
+	return http.ListenAndServe(addr, nil)
 }
 
 // GenerateASCII validates input and generates ASCII art.
@@ -55,33 +65,3 @@ func GenerateASCII(text, banner string) (string, int, error) {
 	return result, http.StatusOK, nil
 }
 
-func handleAsciiArt(w http.ResponseWriter, r *http.Request) {
-	defer func() {
-		if err := recover(); err != nil {
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		}
-	}()
-
-	if r.Method != http.MethodPost {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
-	if err := r.ParseForm(); err != nil {
-		http.Error(w, "Bad Request", http.StatusBadRequest)
-		return
-	}
-
-	text := r.FormValue("input")
-	banner := r.FormValue("font")
-
-	result, status, err := GenerateASCII(text, banner)
-	if err != nil {
-		http.Error(w, err.Error(), status)
-		return
-	}
-
-	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(result))
-}
