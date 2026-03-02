@@ -3,19 +3,19 @@
 {{define "content"}}
 <form action="/ascii-art" method="post" >
 <label class="form-label" for="textarea">Enter text to convert to ASCII art:</label>
-<textarea id="textarea" name="input" rows="8" cols="60" maxlength="855" placeholder="text"></textarea>
+<textarea id="textarea" name="text" rows="8" cols="60" maxlength="855" placeholder="text"></textarea>
 <fieldset class="radio-group">
     <legend class="radio-legend">Choose Font:</legend>
     <div class="radio-option">
-        <input type="radio" id="standard" name="font" value="standard" checked>
+        <input type="radio" id="standard" name="banner" value="standard" checked>
         <label for="standard">Standard</label>
         </div>
         <div class="radio-option">
-            <input type="radio" id="shadow" name="font" value="shadow">
+            <input type="radio" id="shadow" name="banner" value="shadow">
             <label for="shadow">Shadow</label>
         </div>
         <div class="radio-option">
-            <input type="radio" id="thinkertoy" name="font" value="thinkertoy">
+            <input type="radio" id="thinkertoy" name="banner" value="thinkertoy">
             <label for="thinkertoy">Thinkertoy</label>
         </div>
     

@@ -23,6 +23,7 @@
 package web
 
 import (
+	"ascii-art-web/internal/server"
 	"html/template"
 	"net/http"
 )
@@ -42,14 +43,25 @@ type Application struct {
 
 // PageData represents the dynamic data passed to HTML templates.
 //
-// It is used to inject runtime values into templates during execution.
-//
 // Fields:
 //
 //   - Result: the generated ASCII art string rendered inside the page.
 //     This value is displayed in the <pre> block of index.html.
+//   - Title: the page title displayed in the browser tab.
+type PageData struct {
+    Result string
+    Title  string
+}
+```
+
+---
+
+Fix that and commit:
+```
+feat: add dynamic page title support via PageData
 type PageData struct {
 	Result string
+	Title  string
 }
 
 // Home handles requests to the root route ("/").
@@ -66,15 +78,53 @@ type PageData struct {
 //   - w: http.ResponseWriter used to send data to the client
 //   - r: *http.Request containing request metadata
 func (app *Application) Home(w http.ResponseWriter, r *http.Request) {
-
+	if r.URL.Path != "/" {
+		http.NotFound(w, r)
+		return
+	}
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
 	ts, found := app.TemplateCache["index.html"]
 	if !found {
-		http.Error(w, "The template does not exist", http.StatusNotFound)
+		http.Error(w, "Not Found", http.StatusNotFound)
+		return
+	}
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	err := ts.Execute(w, PageData{Result: "", Title: "Home"})
+	if err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+	}
+}
+func (app *Application) HandleAsciiArt(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
-	err := ts.Execute(w, PageData{Result: ""})
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "Bad Request", http.StatusBadRequest)
+		return
+	}
+
+	text := r.FormValue("text")
+	banner := r.FormValue("banner")
+	result, status, err := server.GenerateASCII(text, banner)
 	if err != nil {
-		http.Error(w, "Failed to connect to the internal service", http.StatusInternalServerError)
+		http.Error(w, err.Error(), status)
+		return
+	}
+
+	ts, found := app.TemplateCache["index.html"]
+	if !found {
+		http.Error(w, "Not Found", http.StatusNotFound)
+		return
+	}
+
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	data := PageData{Result: result, Title: "Home"}
+	if err := ts.Execute(w, data); err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 	}
 }
