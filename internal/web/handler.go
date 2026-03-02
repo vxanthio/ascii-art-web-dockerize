@@ -49,17 +49,6 @@ type Application struct {
 //     This value is displayed in the <pre> block of index.html.
 //   - Title: the page title displayed in the browser tab.
 type PageData struct {
-    Result string
-    Title  string
-}
-```
-
----
-
-Fix that and commit:
-```
-feat: add dynamic page title support via PageData
-type PageData struct {
 	Result string
 	Title  string
 }
