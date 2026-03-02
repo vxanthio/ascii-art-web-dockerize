@@ -7,6 +7,7 @@ name: CI
 # - push: runs when code is pushed directly to main or develop
 # - pull_request: runs when a PR is opened/updated targeting main or develop
 on:
+  workflow_dispatch:
   push:
     branches: [main, develop]
   pull_request:
