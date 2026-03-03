@@ -24,8 +24,8 @@ package handlers
 import (
 	"html/template"
 	"net/http"
-	"os"
 
+	"ascii-art-web/internal/banners"
 	"ascii-art-web/internal/parser"
 	"ascii-art-web/internal/renderer"
 	"ascii-art-web/internal/validation"
@@ -76,8 +76,7 @@ func GenerateASCII(text, banner string) (string, int, error) {
 		return "", http.StatusNotFound, err
 	}
 
-	bannerPath := "cmd/ascii-art/testdata/" + banner + ".txt"
-	bannerData, err := parser.LoadBanner(os.DirFS("."), bannerPath)
+	bannerData, err := parser.LoadBanner(banners.FS, banner+".txt")
 	if err != nil {
 		return "", http.StatusNotFound, err
 	}
