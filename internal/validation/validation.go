@@ -59,7 +59,7 @@ func ValidateText(text string) error {
 //   - banner: The banner name submitted by the user.
 //
 // Returns:
-//   - ErrInvalidBanner if the name is not a recognised banner.
+//   - ErrInvalidBanner if the name is not a recognized banner.
 //   - nil if the banner name is valid.
 func ValidateBanner(banner string) error {
 	validBanners := map[string]bool{
