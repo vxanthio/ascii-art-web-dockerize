@@ -45,20 +45,35 @@ jobs:
       #   - Linux:   amd64 (Intel/AMD 64-bit), arm64 (Apple Silicon, Raspberry Pi)
       #   - macOS:   amd64 (older Macs), arm64 (Apple Silicon M1/M2/M3)
       #   - Windows: amd64 (standard PCs)
-      - name: Build Linux amd64
+      - name: Build CLI Linux amd64
         run: GOOS=linux GOARCH=amd64 go build -o bin/ascii-art-linux-amd64 ./cmd/ascii-art
 
-      - name: Build Linux arm64
+      - name: Build CLI Linux arm64
         run: GOOS=linux GOARCH=arm64 go build -o bin/ascii-art-linux-arm64 ./cmd/ascii-art
 
-      - name: Build macOS amd64
+      - name: Build CLI macOS amd64
         run: GOOS=darwin GOARCH=amd64 go build -o bin/ascii-art-darwin-amd64 ./cmd/ascii-art
 
-      - name: Build macOS arm64
+      - name: Build CLI macOS arm64
         run: GOOS=darwin GOARCH=arm64 go build -o bin/ascii-art-darwin-arm64 ./cmd/ascii-art
 
-      - name: Build Windows amd64
+      - name: Build CLI Windows amd64
         run: GOOS=windows GOARCH=amd64 go build -o bin/ascii-art-windows-amd64.exe ./cmd/ascii-art
+
+      - name: Build Web Linux amd64
+        run: GOOS=linux GOARCH=amd64 go build -o bin/ascii-art-web-linux-amd64 ./cmd/ascii-art-web
+
+      - name: Build Web Linux arm64
+        run: GOOS=linux GOARCH=arm64 go build -o bin/ascii-art-web-linux-arm64 ./cmd/ascii-art-web
+
+      - name: Build Web macOS amd64
+        run: GOOS=darwin GOARCH=amd64 go build -o bin/ascii-art-web-darwin-amd64 ./cmd/ascii-art-web
+
+      - name: Build Web macOS arm64
+        run: GOOS=darwin GOARCH=arm64 go build -o bin/ascii-art-web-darwin-arm64 ./cmd/ascii-art-web
+
+      - name: Build Web Windows amd64
+        run: GOOS=windows GOARCH=amd64 go build -o bin/ascii-art-web-windows-amd64.exe ./cmd/ascii-art-web
 
       # Step 4: Create a GitHub Release and upload the binaries.
       # softprops/action-gh-release is a widely-used community action that:
@@ -79,3 +94,8 @@ jobs:
             bin/ascii-art-darwin-amd64
             bin/ascii-art-darwin-arm64
             bin/ascii-art-windows-amd64.exe
+            bin/ascii-art-web-linux-amd64
+            bin/ascii-art-web-linux-arm64
+            bin/ascii-art-web-darwin-amd64
+            bin/ascii-art-web-darwin-arm64
+            bin/ascii-art-web-windows-amd64.exe
