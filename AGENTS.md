@@ -61,6 +61,9 @@ ascii-art-web/
 ├── cmd/
 │   ├── ascii-art/             # CLI entry point
 │   │   ├── main.go
+│   │   ├── args.go
+│   │   ├── banner.go
+│   │   ├── color_mode.go
 │   │   ├── main_test.go
 │   │   ├── integration_test.go
 │   │   └── testdata/          # Banner files and test fixtures
@@ -516,8 +519,8 @@ Workflows are defined in `.github/workflows/`:
 ## Common Tasks
 
 ### Adding a New Banner Style
-1. Add banner file to `internal/banners/<name>.txt` — it is picked up by `//go:embed *.txt`
-2. Add banner file to `cmd/ascii-art/testdata/<name>.txt` — used by CLI tests
+1. Add banner file to `internal/banners/<name>.txt` — picked up by `//go:embed *.txt` (web server)
+2. Add banner file to `cmd/ascii-art/testdata/<name>.txt` — picked up by `//go:embed testdata/*.txt` (CLI)
 3. Update `bannerPaths` map in `cmd/ascii-art/banner.go` to recognize the new name (CLI)
 4. Update `ValidateBanner()` in `internal/validation/validation.go` to accept the new name (web)
 5. Rebuild binaries (files are embedded at compile time)

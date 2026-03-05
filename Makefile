@@ -1,4 +1,4 @@
-# Makefile for ascii-art project
+# Makefile for ascii-art-web project
 # Professional build automation for Go projects
 
 # ==================================================================================== #

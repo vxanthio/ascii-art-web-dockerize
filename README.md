@@ -177,6 +177,9 @@ ascii-art-web/
 ├── cmd/
 │   ├── ascii-art/             # CLI entry point
 │   │   ├── main.go
+│   │   ├── args.go
+│   │   ├── banner.go
+│   │   ├── color_mode.go
 │   │   ├── main_test.go
 │   │   ├── integration_test.go
 │   │   └── testdata/          # Banner files and test fixtures
