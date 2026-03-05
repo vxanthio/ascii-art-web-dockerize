@@ -41,7 +41,7 @@ func ValidateText(text string) error {
 	}
 
 	for _, ch := range text {
-		if ch != '\n' && (ch < 32 || ch > 126) {
+		if ch != '\n' && ch != '\r' && (ch < 32 || ch > 126) {
 			return ErrInvalidChars
 		}
 	}
