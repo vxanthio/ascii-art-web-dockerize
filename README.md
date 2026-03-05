@@ -2,7 +2,9 @@
 
 ![CI](https://github.com/teovaira/ascii-art-web/actions/workflows/ci.yml/badge.svg)
 
-ASCII Art Generator — CLI tool and web interface for converting text to ASCII art using banner styles (standard, shadow, thinkertoy), with optional ANSI 24-bit color support.
+## Description
+
+ASCII Art Generator — a CLI tool and web application written in Go that converts text to ASCII art using three banner styles (standard, shadow, thinkertoy), with optional ANSI 24-bit color support for the CLI. The web interface allows users to type text, choose a banner, and receive the rendered ASCII art directly in the browser.
 
 ## Features
 
@@ -301,6 +303,18 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
 - [CONTRIBUTING.md](CONTRIBUTING.md) - Contribution guidelines
 - [PERMISSIONS.md](PERMISSIONS.md) - Team permissions
 - [diagrams/](diagrams/) - Mermaid architecture diagrams
+
+## Implementation Details
+
+### Algorithm
+
+1. **Parsing** — each banner file (standard, shadow, thinkertoy) is a fixed-format text file where every printable ASCII character (32–126) occupies exactly 8 lines. `parser.LoadBanner()` reads the file and builds a `map[rune][]string` — a character map where each key is a character and the value is its 8-line ASCII art representation.
+
+2. **Rendering** — `renderer.ASCII()` splits the input on newlines and processes each line word by word. For each line it iterates character by character, looks up the 8-line art block in the character map, and appends each row side by side using a `strings.Builder`. The result is the full multi-line ASCII art string.
+
+3. **Web flow** — the browser sends a `POST /ascii-art` request with the form fields `text` and `banner`. The `HandleASCIIArt` handler validates the input via `internal/validation`, calls `GenerateASCII` which runs the parser and renderer, then re-renders `index.html` with the result embedded in a `<pre>` block. On error the same page is re-rendered with an error message and the appropriate HTTP status code (400 for bad input, 404 for unknown banner, 500 for render failure).
+
+4. **Embedded banners** — banner files are compiled into the binary at build time using Go's `//go:embed` directive (`internal/banners`). Neither the web server nor the CLI require banner files on disk at runtime.
 
 ## Authors
 
