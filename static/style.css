@@ -35,7 +35,6 @@ header {
 main {
     flex: 1;
     display: flex;
-    justify-content: center;
     flex-direction: column;
     align-items: center;
     padding: 2rem 1.5rem 4rem;
@@ -209,74 +208,87 @@ footer {
 /* ===== RESPONSIVE: tablet / iPad / Zenbook Fold (768px – 1199px) ===== */
 @media (min-width: 768px) and (max-width: 1199px) {
     header {
-        font-size: 4rem;
-        padding: 3.5rem 2rem 1rem;
+        font-size: 3.5rem;
+        padding: 2.5rem 2rem 1rem;
+    }
+
+    main {
+        padding: 1.5rem 2rem 3rem;
     }
 
     form {
-        max-width: 760px;
+        max-width: 90%;
         padding: 2.25rem;
     }
 
     .error-message,
     pre {
-        max-width: 760px;
+        max-width: 90%;
     }
 
     textarea {
         min-height: 180px;
-        font-size: 1.1rem;
+        font-size: 1.15rem;
     }
 
     .form-label {
-        font-size: 1.15rem;
+        font-size: 1.2rem;
     }
 
     .radio-legend {
-        font-size: 1.15rem;
+        font-size: 1.2rem;
     }
 
     .radio-option label {
-        padding: 11px 22px;
-        font-size: 1.1rem;
-    }
-
-    button {
+        padding: 12px 24px;
         font-size: 1.15rem;
-        padding: 1.1rem;
-    }
-}
-
-/* ===== RESPONSIVE: desktop (1200px – 1599px) ===== */
-@media (min-width: 1200px) and (max-width: 1599px) {
-    header {
-        font-size: 4.5rem;
-        padding: 4rem 2rem 1.5rem;
-    }
-
-    form {
-        max-width: 900px;
-        padding: 2.5rem;
-    }
-
-    .error-message,
-    pre {
-        max-width: 900px;
-    }
-
-    textarea {
-        min-height: 200px;
-        font-size: 1.05rem;
-    }
-
-    .radio-option label {
-        padding: 11px 22px;
-        font-size: 1.05rem;
     }
 
     button {
         font-size: 1.2rem;
         padding: 1.1rem;
+    }
+}
+
+/* ===== RESPONSIVE: desktop / iPad Pro landscape / Surface Pro 7 (1200px – 1599px) ===== */
+@media (min-width: 1200px) and (max-width: 1599px) {
+    header {
+        font-size: 4.5rem;
+        padding: 3rem 2rem 1.5rem;
+    }
+
+    main {
+        padding: 2rem 3rem 4rem;
+    }
+
+    form {
+        max-width: 80%;
+        padding: 2.5rem;
+    }
+
+    .error-message,
+    pre {
+        max-width: 80%;
+    }
+
+    textarea {
+        min-height: 200px;
+        font-size: 1.15rem;
+    }
+
+    .form-label,
+    .radio-legend {
+        font-size: 1.2rem;
+    }
+
+    .radio-option label {
+        padding: 12px 24px;
+        font-size: 1.15rem;
+    }
+
+    button {
+        font-size: 1.25rem;
+        padding: 1.15rem;
     }
 }
 
