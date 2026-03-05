@@ -302,6 +302,14 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
 - [PERMISSIONS.md](PERMISSIONS.md) - Team permissions
 - [diagrams/](diagrams/) - Mermaid architecture diagrams
 
+## Authors
+
+| Name | Role |
+|------|------|
+| Theodore | Team Lead |
+| Krystallenia | Backend |
+| Vasiliki | Frontend |
+
 ## License
 
 See [LICENSE](LICENSE) file for details.
