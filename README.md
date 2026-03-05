@@ -2,17 +2,16 @@
 
 ![CI](https://github.com/teovaira/ascii-art-web/actions/workflows/ci.yml/badge.svg)
 
-ASCII Art Generator with Web Interface - Convert text strings into ASCII art using predefined banner styles (standard, shadow, thinkertoy) via a web GUI.
-
-ASCII Art Generator with ANSI Color Support - Convert text strings into ASCII art using predefined banner styles (standard, shadow, thinkertoy), with optional 24-bit color for full text or specific substrings.
+ASCII Art Generator — CLI tool and web interface for converting text to ASCII art using banner styles (standard, shadow, thinkertoy), with optional ANSI 24-bit color support.
 
 ## Features
 
+- Web interface for browser-based ASCII art generation
 - Three banner styles: standard, shadow, thinkertoy
 - ANSI 24-bit color support (named colors, hex, RGB)
 - Substring coloring for highlighting specific parts of the output
+- User-friendly error feedback in the web UI
 - High performance (sub-millisecond rendering)
-- 100% test coverage on critical packages
 - Zero external dependencies (Go standard library only)
 - Cross-platform support (Linux, macOS, Windows)
 - Support for newline characters in input
@@ -30,25 +29,37 @@ ASCII Art Generator with ANSI Color Support - Convert text strings into ASCII ar
 git clone https://github.com/teovaira/ascii-art-web.git
 cd ascii-art-web
 
-# Build (from repository root)
+# Build CLI binary
 make build
 # or: go build -o bin/ascii-art ./cmd/ascii-art
 
-# Run (binary works from any directory)
-./bin/ascii-art "Hello World" standard
+# Build web server binary
+make build-web
+# or: go build -o bin/ascii-art-web ./cmd/ascii-art-web
 ```
 
 ## Usage
 
-> **Note**: The compiled binary (`./bin/ascii-art`) is fully relocatable and can be run from any directory. Development commands using `go run` must be executed from the `cmd/ascii-art` directory.
+### Web server
 
-### Normal mode
+```bash
+# Run from repository root
+make run-web
+# or: go run ./cmd/ascii-art-web
+
+# Custom port
+PORT=9090 go run ./cmd/ascii-art-web
+```
+
+Open [http://localhost:8080](http://localhost:8080) in your browser, type text, choose a banner, and submit.
+
+### CLI — Normal mode
 
 ```bash
 cd cmd/ascii-art && go run . "text" [banner]
 ```
 
-### Color mode
+### CLI — Color mode
 
 ```bash
 cd cmd/ascii-art && go run . --color=<color> "text" [banner]
@@ -106,19 +117,9 @@ cd cmd/ascii-art && go run . --color=blue B "RGB()"
 cd cmd/ascii-art && go run . --color=#ff0000 "Hello"
 ```
 
-**RGB color format (with escaped parentheses):**
-```bash
-cd cmd/ascii-art && go run . --color=rgb\(255,0,0\) "Hello"
-```
-
 **RGB color format (with single quotes):**
 ```bash
 cd cmd/ascii-art && go run . --color='rgb(255,0,0)' "Hello"
-```
-
-**RGB color format (with double quotes):**
-```bash
-cd cmd/ascii-art && go run . --color="rgb(255,0,0)" "Hello"
 ```
 
 **Newline support:**
@@ -143,7 +144,10 @@ make lint
 # Format code
 make fmt
 
-# Run with color mode
+# Run web server
+make run-web
+
+# Run CLI with color mode
 make run-color
 ```
 
@@ -171,18 +175,32 @@ ascii-art-web/
 │   ├── flowchart.md           # Program execution flow
 │   └── sequence-diagram.md    # Color mode call sequence
 ├── cmd/
-│   └── ascii-art/
-│       ├── main.go            # CLI entry point
-│       ├── main_test.go       # Unit tests for main package
-│       ├── integration_test.go # End-to-end tests
-│       └── testdata/          # Banner files and test fixtures
-│           ├── standard.txt
-│           ├── shadow.txt
-│           ├── thinkertoy.txt
-│           ├── corrupted.txt  # Test fixture
-│           ├── empty.txt      # Test fixture
-│           └── oversized.txt  # Test fixture
+│   ├── ascii-art/             # CLI entry point
+│   │   ├── main.go
+│   │   ├── main_test.go
+│   │   ├── integration_test.go
+│   │   └── testdata/          # Banner files and test fixtures
+│   │       ├── standard.txt
+│   │       ├── shadow.txt
+│   │       ├── thinkertoy.txt
+│   │       ├── corrupted.txt
+│   │       ├── empty.txt
+│   │       └── oversized.txt
+│   └── ascii-art-web/         # Web server entry point
+│       ├── main.go
+│       └── integration_test.go
+├── static/                    # Static web assets
+│   ├── style.css
+│   └── favicon files
+├── templates/                 # HTML templates
+│   ├── base.html
+│   └── index.html
 └── internal/
+    ├── banners/               # Embedded banner files
+    │   ├── banners.go
+    │   ├── standard.txt
+    │   ├── shadow.txt
+    │   └── thinkertoy.txt
     ├── color/                 # Color specification parsing
     │   ├── color.go
     │   └── color_test.go
@@ -192,12 +210,19 @@ ascii-art-web/
     ├── flagparser/            # CLI argument validation
     │   ├── flagparser.go
     │   └── flagparser_test.go
+    ├── handlers/              # HTTP handlers and template cache
+    │   ├── handlers.go
+    │   ├── handlers_test.go
+    │   └── template_cache.go
     ├── parser/                # Banner file parsing
     │   ├── banner_parser.go
     │   └── parser_test.go
-    └── renderer/              # ASCII art rendering
-        ├── renderer.go
-        └── renderer_test.go
+    ├── renderer/              # ASCII art rendering
+    │   ├── renderer.go
+    │   └── renderer_test.go
+    └── validation/            # Input validation for web handler
+        ├── validation.go
+        └── validation_test.go
 ```
 
 ### Running Tests
@@ -213,13 +238,16 @@ make coverage
 ### Build Commands
 
 ```bash
-# Build for current platform
+# Build CLI for current platform
 make build
 
-# Build for all platforms
+# Build web server
+make build-web
+
+# Build CLI for all platforms
 make build-all
 
-# Build for specific platforms
+# Build CLI for specific platforms
 make build-linux    # Linux (amd64 and arm64)
 make build-darwin   # macOS (amd64 and arm64)
 make build-windows  # Windows (amd64)
@@ -227,26 +255,32 @@ make build-windows  # Windows (amd64)
 
 ## Architecture
 
-The project follows a clean architecture with six packages:
+The project serves both a CLI tool and a web server from a shared set of internal packages:
 
 - **main** (`cmd/ascii-art`): CLI interface and orchestration
+- **main** (`cmd/ascii-art-web`): HTTP server entry point
+- **handlers** (`internal/handlers`): HTTP handlers, ASCII generation, template cache
+- **banners** (`internal/banners`): Banner files embedded into the binary at compile time
 - **parser** (`internal/parser`): Banner file reading and character map building
 - **renderer** (`internal/renderer`): Text-to-ASCII-art conversion
+- **validation** (`internal/validation`): Web input validation (text length, banner name)
 - **color** (`internal/color`): Color specification parsing (named, hex, RGB)
 - **coloring** (`internal/coloring`): ANSI color application to rendered ASCII art
-- **flagparser** (`internal/flagparser`): Command-line argument validation
+- **flagparser** (`internal/flagparser`): CLI argument validation
 
 For visual diagrams see the [diagrams/](diagrams/) folder:
 [Architecture Overview](diagrams/architecture.md) | [Flowchart](diagrams/flowchart.md) | [Class Diagram](diagrams/class-diagram.md) | [Sequence Diagram](diagrams/sequence-diagram.md)
 
 ## Test Coverage
 
-- **color**: 97.7%
+- **validation**: 100.0%
 - **coloring**: 100.0%
 - **flagparser**: 100.0%
+- **handlers**: 89.2%
+- **color**: 97.7%
 - **parser**: 95.0%
 - **renderer**: 97.1%
-- **main**: 39.1% (os.Exit prevents in-process coverage; tested via integration)
+- **main (cli)**: 39.1% (os.Exit prevents in-process coverage; tested via integration)
 
 ## Contributing
 
