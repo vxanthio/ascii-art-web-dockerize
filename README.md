@@ -42,10 +42,15 @@ make build-web
 
 ### Web server
 
+> **Note**: The web server binary and `go run` must be executed from the **repository root**. The server reads `templates/` and `static/` as relative paths at runtime. Unlike the CLI binary, it is not relocatable.
+
 ```bash
 # Run from repository root
 make run-web
 # or: go run ./cmd/ascii-art-web
+
+# Run the built binary — must also be from repository root
+./bin/ascii-art-web
 
 # Custom port
 PORT=9090 go run ./cmd/ascii-art-web
