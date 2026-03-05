@@ -42,12 +42,12 @@ func TestIntegration_WebServer(t *testing.T) {
 	defer srv.Close()
 
 	tests := []struct {
-		name         string
-		method       string
-		path         string
-		formData     url.Values
-		wantStatus   int
-		wantInBody   string
+		name          string
+		method        string
+		path          string
+		formData      url.Values
+		wantStatus    int
+		wantInBody    string
 		wantNotInBody string
 	}{
 		{
@@ -79,44 +79,44 @@ func TestIntegration_WebServer(t *testing.T) {
 			wantInBody: "Method not allowed",
 		},
 		{
-			name:         "POST /ascii-art empty text returns 400 with error in page",
-			method:       http.MethodPost,
-			path:         "/ascii-art",
-			formData:     url.Values{"text": {""}, "banner": {"standard"}},
-			wantStatus:   http.StatusBadRequest,
-			wantInBody:   "text cannot be empty",
+			name:       "POST /ascii-art empty text returns 400 with error in page",
+			method:     http.MethodPost,
+			path:       "/ascii-art",
+			formData:   url.Values{"text": {""}, "banner": {"standard"}},
+			wantStatus: http.StatusBadRequest,
+			wantInBody: "text cannot be empty",
 		},
 		{
-			name:         "POST /ascii-art invalid banner returns 404 with error in page",
-			method:       http.MethodPost,
-			path:         "/ascii-art",
-			formData:     url.Values{"text": {"Hello"}, "banner": {"invalid"}},
-			wantStatus:   http.StatusNotFound,
-			wantInBody:   "invalid banner name",
+			name:       "POST /ascii-art invalid banner returns 404 with error in page",
+			method:     http.MethodPost,
+			path:       "/ascii-art",
+			formData:   url.Values{"text": {"Hello"}, "banner": {"invalid"}},
+			wantStatus: http.StatusNotFound,
+			wantInBody: "invalid banner name",
 		},
 		{
-			name:         "POST /ascii-art valid standard banner returns 200 with ASCII art",
-			method:       http.MethodPost,
-			path:         "/ascii-art",
-			formData:     url.Values{"text": {"{123}"}, "banner": {"standard"}},
-			wantStatus:   http.StatusOK,
-			wantInBody:   "<pre>",
+			name:       "POST /ascii-art valid standard banner returns 200 with ASCII art",
+			method:     http.MethodPost,
+			path:       "/ascii-art",
+			formData:   url.Values{"text": {"{123}"}, "banner": {"standard"}},
+			wantStatus: http.StatusOK,
+			wantInBody: "<pre>",
 		},
 		{
-			name:         "POST /ascii-art valid shadow banner returns 200",
-			method:       http.MethodPost,
-			path:         "/ascii-art",
-			formData:     url.Values{"text": {"Hi"}, "banner": {"shadow"}},
-			wantStatus:   http.StatusOK,
-			wantInBody:   "<pre>",
+			name:       "POST /ascii-art valid shadow banner returns 200",
+			method:     http.MethodPost,
+			path:       "/ascii-art",
+			formData:   url.Values{"text": {"Hi"}, "banner": {"shadow"}},
+			wantStatus: http.StatusOK,
+			wantInBody: "<pre>",
 		},
 		{
-			name:         "POST /ascii-art valid thinkertoy banner returns 200",
-			method:       http.MethodPost,
-			path:         "/ascii-art",
-			formData:     url.Values{"text": {"Go"}, "banner": {"thinkertoy"}},
-			wantStatus:   http.StatusOK,
-			wantInBody:   "<pre>",
+			name:       "POST /ascii-art valid thinkertoy banner returns 200",
+			method:     http.MethodPost,
+			path:       "/ascii-art",
+			formData:   url.Values{"text": {"Go"}, "banner": {"thinkertoy"}},
+			wantStatus: http.StatusOK,
+			wantInBody: "<pre>",
 		},
 		{
 			name:       "GET /static/style.css returns 200",
@@ -126,19 +126,19 @@ func TestIntegration_WebServer(t *testing.T) {
 			wantInBody: "body",
 		},
 		{
-			name:         "POST /ascii-art result page has no error message on success",
-			method:       http.MethodPost,
-			path:         "/ascii-art",
-			formData:     url.Values{"text": {"Hi"}, "banner": {"standard"}},
-			wantStatus:   http.StatusOK,
+			name:          "POST /ascii-art result page has no error message on success",
+			method:        http.MethodPost,
+			path:          "/ascii-art",
+			formData:      url.Values{"text": {"Hi"}, "banner": {"standard"}},
+			wantStatus:    http.StatusOK,
 			wantNotInBody: "error-message",
 		},
 		{
-			name:         "POST /ascii-art error page has no pre block",
-			method:       http.MethodPost,
-			path:         "/ascii-art",
-			formData:     url.Values{"text": {""}, "banner": {"standard"}},
-			wantStatus:   http.StatusBadRequest,
+			name:          "POST /ascii-art error page has no pre block",
+			method:        http.MethodPost,
+			path:          "/ascii-art",
+			formData:      url.Values{"text": {""}, "banner": {"standard"}},
+			wantStatus:    http.StatusBadRequest,
 			wantNotInBody: "<pre>",
 		},
 	}
