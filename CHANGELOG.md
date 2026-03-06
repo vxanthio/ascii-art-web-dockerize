@@ -46,6 +46,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - HTTP server changed from `http.ListenAndServe` to `http.Server` with explicit timeouts
 - CI workflow `workflow_dispatch` trigger removed — CI runs only on push and pull_request
 
+### Fixed
+- Windows line endings (`\r\n`) submitted via the web form were passed raw to the renderer, causing malformed ASCII art output. The handler now normalizes `\r\n` to `\n` before validation and rendering.
+
 ### Removed
 - `internal/server` package (dissolved into `internal/handlers`)
 - `internal/web` package (dissolved into `internal/handlers`)
