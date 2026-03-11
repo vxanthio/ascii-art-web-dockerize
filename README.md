@@ -17,12 +17,34 @@ ASCII Art Generator — a CLI tool and web application written in Go that conver
 - Zero external dependencies (Go standard library only)
 - Cross-platform support (Linux, macOS, Windows)
 - Support for newline characters in input
+- Docker support — containerized deployment with a single command
 
 ## Installation
 
 ### Prerequisites
 
-- Go 1.22.2 or higher
+- Go 1.22.2 or higher *(for building from source)*
+- Docker *(for containerized deployment)*
+
+### Run with Docker
+
+```bash
+# Build the image and start the container (port 8080)
+./docker-build.sh
+# or step by step:
+docker image build -f Dockerfile -t ascii-art-web-docker .
+docker container run --publish 8080:8080 --detach --name dockerize ascii-art-web-docker
+```
+
+Open [http://localhost:8080](http://localhost:8080) in your browser.
+
+```bash
+# Stop and remove the container
+./docker-build.sh stop
+
+# Stop container and remove image
+./docker-build.sh clean
+```
 
 ### Build from source
 
@@ -44,15 +66,16 @@ go build -o bin/ascii-art-web ./cmd/ascii-art-web
 
 ### Web server
 
-> **Note**: The web server binary and `go run` must be executed from the **repository root**. The server reads `templates/` and `static/` as relative paths at runtime. Unlike the CLI binary, it is not relocatable.
-
+**Via Docker (recommended):**
 ```bash
-# Run from repository root
+./docker-build.sh          # build image + start container on port 8080
+# or: make docker-build && make docker-run
+```
+
+**From source** (must run from repository root — server reads `templates/` and `static/` as relative paths):
+```bash
 go run ./cmd/ascii-art-web
 # or: make run-web
-
-# Run the built binary — must also be from repository root
-./bin/ascii-art-web
 
 # Custom port
 PORT=9090 go run ./cmd/ascii-art-web
@@ -174,8 +197,10 @@ ascii-art-web-dockerize/
 │       └── release.yml        # Release workflow (cross-platform binaries)
 ├── .gitignore                 # Git ignore rules
 ├── .golangci.yml              # Linter configuration
+├── Dockerfile                 # Multi-stage Docker build
+├── docker-build.sh            # Helper script: build image + run container
 ├── LICENSE                    # Project license
-├── Makefile                   # Build automation
+├── Makefile                   # Build automation (incl. docker-* targets)
 ├── go.mod                     # Go module file
 ├── AGENTS.md                  # AI agent instructions
 ├── CHANGELOG.md               # Version history
@@ -267,6 +292,15 @@ make build-all
 make build-linux    # Linux (amd64 and arm64)
 make build-darwin   # macOS (amd64 and arm64)
 make build-windows  # Windows (amd64)
+```
+
+### Docker Commands
+
+```bash
+make docker-build   # Build the Docker image (ascii-art-web-docker)
+make docker-run     # Run the container (dockerize) on port 8080
+make docker-stop    # Stop and remove the container
+make docker-clean   # Stop container + remove image
 ```
 
 ## Architecture
