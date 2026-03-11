@@ -45,12 +45,21 @@ flowchart LR
     handlers -->|"reads embedded FS"| banners
     parser -->|"reads embedded FS"| banners
 
+    dockerfile -->|"compiles + packages"| webmain
+    dockerbuild -->|"builds image"| dockerfile
+
     style CLILayer fill:#4a90d9,color:#fff
     style WebLayer fill:#9b59b6,color:#fff
     style Shared fill:#e74c3c,color:#fff
     style Input fill:#7b68ee,color:#fff
     style Core fill:#2ecc71,color:#fff
     style Output fill:#e67e22,color:#fff
+    style DeployLayer fill:#1abc9c,color:#fff
+
+    subgraph DeployLayer["Deployment Layer"]
+        dockerfile["Dockerfile<br/>Multi-stage build"]
+        dockerbuild["docker-build.sh<br/>Build and run script"]
+    end
 ```
 
 ## Package Responsibilities
@@ -67,6 +76,8 @@ flowchart LR
 | Core | `parser` | Reads banner files from `fs.FS`, builds character maps |
 | Core | `renderer` | Converts text to ASCII art using banner maps |
 | Output | `coloring` | Applies ANSI color codes to rendered ASCII art |
+| Deployment | `Dockerfile` | Multi-stage build: compiles Go binary, packages into minimal Alpine image |
+| Deployment | `docker-build.sh` | Helper script to build image `ascii-art-web-docker` and run container `dockerize` |
 
 ## Key Design Decisions
 
@@ -75,3 +86,4 @@ flowchart LR
 - **No import cycles** — `handlers` imports `parser`, `renderer`, `validation`, `banners`; nothing imports back
 - **Stateless packages** — all functions are pure transformations with no global state
 - **Web input validation** — `validation` package is web-only; CLI uses `flagparser` and `bannerPaths` map
+- **Multi-stage Docker build** — compiler tools stay in stage 1 only; final image is minimal Alpine with binary + assets
