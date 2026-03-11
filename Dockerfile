@@ -42,6 +42,9 @@ LABEL org.opencontainers.image.licenses="MIT"
 
 WORKDIR /app
 
+# Install bash so auditors can run: docker exec -it dockerize /bin/bash
+RUN apk add --no-cache bash
+
 # Copy the compiled binary from the builder stage.
 COPY --from=builder /build/server ./server
 
