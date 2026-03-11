@@ -30,6 +30,7 @@ This project is part of the Zone01 curriculum. We expect all contributors to:
 - Go 1.22.2 or higher
 - make (optional but recommended)
 - golangci-lint v2+ (for code quality checks)
+- Docker (optional, for containerized deployment testing)
 
 ### Installation
 
@@ -285,6 +286,7 @@ We use [Conventional Commits](https://www.conventionalcommits.org/) format:
 - `flagparser`: Flagparser package
 - `templates`: HTML templates
 - `static`: CSS and static assets
+- `docker`: Dockerfile and container configuration
 - `tests`: Test-related
 - `docs`: Documentation
 - `build`: Build/tooling
@@ -378,8 +380,10 @@ ascii-art-web-dockerize/
 │       └── release.yml        # Release workflow (cross-platform binaries)
 ├── .gitignore                 # Git ignore rules
 ├── .golangci.yml              # Linter configuration
+├── Dockerfile                 # Multi-stage Docker build
+├── docker-build.sh            # Helper script: build image + run container
 ├── LICENSE                    # Project license
-├── Makefile                   # Build automation
+├── Makefile                   # Build automation (incl. docker-* targets)
 ├── go.mod                     # Go module file
 ├── AGENTS.md                  # AI agent instructions
 ├── CHANGELOG.md               # Version history
