@@ -235,11 +235,16 @@ This project follows the official Go style guide and best practices:
 
 ```bash
 # All tests
-make test
+go test ./...
+# or: make test
 
-# With coverage
-make coverage
-make coverage-view  # Opens HTML report
+# With coverage report
+go test -coverprofile=coverage.out ./... && go tool cover -func=coverage.out
+# or: make coverage
+
+# Open coverage as HTML in browser
+go test -coverprofile=coverage.out ./... && go tool cover -html=coverage.out -o coverage.html
+# or: make coverage-view
 
 # Specific package
 go test ./internal/parser -v
