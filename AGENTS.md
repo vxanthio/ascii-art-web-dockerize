@@ -74,6 +74,7 @@ ascii-art-web-dockerize/
 ├── .gitignore                 # Git ignore rules
 ├── .golangci.yml              # Linter configuration
 ├── Dockerfile                 # Multi-stage Docker build
+├── .dockerignore              # Docker build context exclusions
 ├── docker-build.sh            # Helper script: build image + run container
 ├── LICENSE                    # Project license
 ├── Makefile                   # Build automation (incl. docker-* targets)
